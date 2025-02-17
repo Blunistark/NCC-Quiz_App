@@ -1,10 +1,64 @@
 {
   "expo": {
     "scheme": "acme",
+    "name": "QuizApp-NCC",
+    "slug": "QuizApp-NCC",
     "plugins": [
       "expo-router"
     ],
-    "name": "QuizApp-NCC",
-    "slug": "QuizApp-NCC"
+    "android": {
+      "package": "com.quizapp.ncc"
+    },
+    "ios": {
+      "bundleIdentifier": "com.quizapp.ncc"
+    },
+    "experiments": {
+      "tsconfigPaths": true,
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "your-project-id"
+      }
+    },
+    "owner": "your-expo-username",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "your-update-url"
+    },
+    "build": {
+      "development": {
+        "developmentClient": true,
+        "distribution": "internal",
+        "ios": {
+          "resourceClass": "m-medium"
+        },
+        "env": {
+          "EXPO_PUBLIC_NEW_ARCH_ENABLED": "1"
+        }
+      },
+      "preview": {
+        "distribution": "internal",
+        "ios": {
+          "resourceClass": "m-medium"
+        },
+        "env": {
+          "EXPO_PUBLIC_NEW_ARCH_ENABLED": "1"
+        }
+      },
+      "production": {
+        "ios": {
+          "resourceClass": "m-medium"
+        },
+        "env": {
+          "EXPO_PUBLIC_NEW_ARCH_ENABLED": "1"
+        }
+      }
+    }
   }
 }
