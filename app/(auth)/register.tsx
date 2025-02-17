@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { TextInput, Button, Text } from 'react-native-paper';
-import { router } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { supabase } from '../../lib/supabase';
 
 export default function Register() {
@@ -87,6 +87,18 @@ export default function Register() {
       >
         Register
       </Button>
+
+      <View style={styles.registerContainer}>
+        <Text variant="bodyMedium">Already have an account? </Text>
+        <Link href="/(auth)/login" asChild>
+          <Button
+            mode="text"
+            compact
+          >
+            Login
+          </Button>
+        </Link>
+      </View>
     </View>
   );
 }
@@ -111,5 +123,11 @@ const styles = StyleSheet.create({
     color: 'red',
     textAlign: 'center',
     marginBottom: 15,
+  },
+  registerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
   },
 }); 

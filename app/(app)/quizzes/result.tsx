@@ -16,8 +16,29 @@ export default function QuizResult() {
 
   return (
     <View style={styles.container}>
-      <Text variant="headlineMedium" style={styles.title}>Quiz Completed!</Text>
-      
+      <Card style={styles.scoreCard}>
+        <Card.Content>
+          <Text variant="titleMedium" style={styles.date}>
+            {new Date().toLocaleDateString('en-US', { 
+              month: 'uppercase',
+              day: 'numeric'
+            })}
+          </Text>
+          
+          <Text variant="headlineLarge" style={styles.mainText}>
+            You completed the quiz with
+          </Text>
+          
+          <Text variant="displayLarge" style={styles.percentage}>
+            {percentage}%
+          </Text>
+          
+          <Text variant="headlineMedium" style={styles.accuracy}>
+            accuracy!
+          </Text>
+        </Card.Content>
+      </Card>
+
       <Card style={styles.scoreCard}>
         <Card.Content>
           <Text variant="headlineLarge" style={styles.score}>
@@ -59,21 +80,34 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    marginBottom: 30,
   },
   scoreCard: {
+    backgroundColor: '#FFC800', // Duolingo yellow
+    borderRadius: 20,
+    marginBottom: 30,
+  },
+  date: {
+    color: '#784910', // Dark brown text
+    marginBottom: 10,
+  },
+  mainText: {
+    color: '#784910',
+    textAlign: 'center',
+  },
+  percentage: {
+    fontSize: 72,
+    color: '#784910',
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  accuracy: {
+    color: '#784910',
+    textAlign: 'center',
     marginBottom: 20,
   },
   score: {
     fontSize: 48,
     marginBottom: 10,
-  },
-  percentage: {
-    marginBottom: 40,
   },
   grade: {
     marginTop: 10,

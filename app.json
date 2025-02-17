@@ -2,7 +2,8 @@
   "expo": {
     "scheme": "acme",
     "name": "QuizApp-NCC",
-    "slug": "QuizApp-NCC",
+    "slug": "quizapp-ncc",
+    "icon": "./assets/ncc-logo.png", // Path to your logo
     "plugins": [
       "expo-router"
     ],
@@ -21,44 +22,20 @@
         "origin": false
       },
       "eas": {
-        "projectId": "your-project-id"
-      }
+        "projectId": "5836b7b7-61f8-4b74-a17d-deeeaa98f9b0"
+      },
+      "newArchEnabled": true
     },
-    "owner": "your-expo-username",
+    "owner": "blunistark",
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
       "url": "your-update-url"
     },
-    "build": {
-      "development": {
-        "developmentClient": true,
-        "distribution": "internal",
-        "ios": {
-          "resourceClass": "m-medium"
-        },
-        "env": {
-          "EXPO_PUBLIC_NEW_ARCH_ENABLED": "1"
-        }
-      },
-      "preview": {
-        "distribution": "internal",
-        "ios": {
-          "resourceClass": "m-medium"
-        },
-        "env": {
-          "EXPO_PUBLIC_NEW_ARCH_ENABLED": "1"
-        }
-      },
-      "production": {
-        "ios": {
-          "resourceClass": "m-medium"
-        },
-        "env": {
-          "EXPO_PUBLIC_NEW_ARCH_ENABLED": "1"
-        }
-      }
-    }
+    "assetBundlePatterns": [
+      "**/*",
+      "assets/*"
+    ]
   }
 }

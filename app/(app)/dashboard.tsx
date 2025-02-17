@@ -1,4 +1,4 @@
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, Image } from 'react-native';
 import { Text, Card, Button, Banner } from 'react-native-paper';
 import { router } from 'expo-router';
 import { supabase } from '../../lib/supabase';
@@ -28,27 +28,45 @@ export default function Dashboard() {
         </Banner>
       )}
       
-      <Text variant="headlineMedium" style={styles.welcome}>
-        Welcome
-      </Text>
+      <View style={styles.header}>
+        <Image 
+          source={require('../../assets/ncc-logo.png')} 
+          style={styles.logo}
+        />
+        <Text variant="headlineMedium" style={styles.welcome}>
+          Welcome to NCC Quiz
+        </Text>
+      </View>
 
       <View style={styles.grid}>
-        <Card style={styles.card}>
+        <Card style={[styles.card, { borderLeftColor: '#E31E24', borderLeftWidth: 4 }]}>
           <Card.Content>
-            <Text variant="titleLarge">Quizzes</Text>
-            <Text variant="bodyMedium">Practice with topic-based quizzes</Text>
+            <View style={styles.cardHeader}>
+              <View>
+                <Text variant="titleLarge" style={{ color: '#1B3C8D' }}>Quizzes</Text>
+                <Text variant="bodyMedium">Practice with topic-based quizzes</Text>
+              </View>
+            </View>
           </Card.Content>
           <Card.Actions>
-            <Button onPress={() => router.push('/(app)/quizzes')}>
+            <Button 
+              mode="contained"
+              style={{ backgroundColor: '#E31E24' }}
+              onPress={() => router.push('/(app)/quizzes')}
+            >
               Start Quiz
             </Button>
           </Card.Actions>
         </Card>
 
-        <Card style={styles.card}>
+        <Card style={[styles.card, { borderLeftColor: '#E31E24', borderLeftWidth: 4 }]}>
           <Card.Content>
-            <Text variant="titleLarge">Mock Tests</Text>
-            <Text variant="bodyMedium">Take a comprehensive mock test</Text>
+            <View style={styles.cardHeader}>
+              <View>
+                <Text variant="titleLarge" style={{ color: '#1B3C8D' }}>Mock Tests</Text>
+                <Text variant="bodyMedium">Take a comprehensive mock test</Text>
+              </View>
+            </View>
           </Card.Content>
           <Card.Actions>
             <Button onPress={() => router.push('/(app)/mock-tests')}>
@@ -57,10 +75,14 @@ export default function Dashboard() {
           </Card.Actions>
         </Card>
 
-        <Card style={styles.card}>
+        <Card style={[styles.card, { borderLeftColor: '#E31E24', borderLeftWidth: 4 }]}>
           <Card.Content>
-            <Text variant="titleLarge">Leaderboard</Text>
-            <Text variant="bodyMedium">Check your ranking</Text>
+            <View style={styles.cardHeader}>
+              <View>
+                <Text variant="titleLarge" style={{ color: '#1B3C8D' }}>Leaderboard</Text>
+                <Text variant="bodyMedium">Check your ranking</Text>
+              </View>
+            </View>
           </Card.Content>
           <Card.Actions>
             <Button onPress={() => router.push('/(app)/leaderboard')}>
@@ -69,10 +91,14 @@ export default function Dashboard() {
           </Card.Actions>
         </Card>
 
-        <Card style={styles.card}>
+        <Card style={[styles.card, { borderLeftColor: '#E31E24', borderLeftWidth: 4 }]}>
           <Card.Content>
-            <Text variant="titleLarge">Profile</Text>
-            <Text variant="bodyMedium">Manage your profile</Text>
+            <View style={styles.cardHeader}>
+              <View>
+                <Text variant="titleLarge" style={{ color: '#1B3C8D' }}>Profile</Text>
+                <Text variant="bodyMedium">Manage your profile</Text>
+              </View>
+            </View>
           </Card.Content>
           <Card.Actions>
             <Button onPress={() => router.push('/(app)/profile')}>
@@ -98,8 +124,19 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
   },
+  header: {
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    resizeMode: 'contain',
+    marginBottom: 10,
+  },
   welcome: {
-    marginBottom: 20,
+    textAlign: 'center',
+    color: '#1B3C8D',
   },
   grid: {
     flexDirection: 'row',
@@ -113,5 +150,16 @@ const styles = StyleSheet.create({
   signOutButton: {
     marginTop: 20,
     marginBottom: 40,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  cardIcon: {
+    width: 40,
+    height: 40,
+    marginRight: 15,
+    resizeMode: 'contain',
   },
 }); 
