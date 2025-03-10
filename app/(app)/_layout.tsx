@@ -20,7 +20,8 @@ export default function AppLayout() {
         name="dashboard"
         options={{
           title: 'Dashboard',
-          headerBackVisible: false
+          headerBackVisible: false,
+          headerShown : false
         }}
       />
       <Stack.Screen
@@ -34,32 +35,40 @@ export default function AppLayout() {
       <Stack.Screen
         name="quizzes"
         options={{
-          title: 'Quizzes'
+          title: 'Quizzes',
+          headerTitle: 'Quizzes',
+          headerShown: false
         }}
       />
       <Stack.Screen
         name="quizzes/[id]"
         options={{
-          title: 'Quiz'
+          title: 'Quiz',
+          headerTitle: 'Quiz',
+          headerShown: false
         }}
       />
       <Stack.Screen
         name="quizzes/result"
         options={{
           title: 'Quiz Result',
+          headerTitle: 'Quiz Result',
           headerBackVisible: false
         }}
       />
       <Stack.Screen
         name="mock-tests"
         options={{
-          title: 'Mock Tests'
+          title: 'Mock Tests',
+          headerTitle: 'Mock Tests',
+          headerShown: false
         }}
       />
       <Stack.Screen
         name="mock-tests/[id]"
         options={{
           title: 'Mock Test',
+          headerTitle: 'Mock Test',
           headerBackVisible: false
         }}
       />
@@ -67,25 +76,33 @@ export default function AppLayout() {
         name="mock-tests/result"
         options={{
           title: 'Test Result',
+          headerTitle: 'Test Result',
+          headerShown: false,
           headerBackVisible: false
         }}
       />
       <Stack.Screen
         name="leaderboard"
         options={{
-          title: 'Leaderboard'
+          title: 'Leaderboard',
+          headerTitle: 'Leaderboard',
+          headerShown: false
         }}
       />
       <Stack.Screen
         name="profile"
         options={{
-          title: 'Profile'
+          title: 'Profile',
+          headerTitle: 'Profile',
+          headerShown: false
         }}
       />
       <Stack.Screen
         name="profile/edit"
         options={{
-          title: 'Edit Profile'
+          title: 'Edit Profile',
+          headerTitle: 'Edit Profile',
+          headerShown: false
         }}
       />
     </Stack>

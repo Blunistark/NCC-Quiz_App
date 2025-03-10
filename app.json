@@ -8,6 +8,7 @@
       "expo-router"
     ],
     "android": {
+      
       "package": "com.quizapp.ncc"
     },
     "ios": {

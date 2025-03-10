@@ -9,17 +9,43 @@ type LeaderboardEntry = {
   total_score: number;
   tests_completed: number;
   average_score: number;
+  quiz_title: string;
 };
 
 export default function Leaderboard() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [type, setType] = useState<'quiz' | 'mock'>('quiz');
+  const [topics, setTopics] = useState<string[]>([]);
+  const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchLeaderboard();
-  }, [type]);
+    fetchTopics();
+  }, []);
+
+  useEffect(() => {
+    if (selectedTopic) {
+      fetchLeaderboard();
+    }
+  }, [selectedTopic]);
+
+  async function fetchTopics() {
+    try {
+      const { data, error } = await supabase
+        .from('quizzes')
+        .select('subject');
+
+      if (error) throw error;
+
+      // Extract unique subjects
+      const subjects = Array.from(new Set(data.map((quiz) => quiz.subject)));
+      setTopics(subjects);
+      setSelectedTopic(subjects[0]); // Set the first topic as default
+    } catch (error) {
+      console.error('Error fetching topics:', error);
+      setError('Failed to load topics');
+    }
+  }
 
   async function fetchLeaderboard() {
     try {
@@ -27,28 +53,41 @@ export default function Leaderboard() {
       setError(null);
 
       const { data, error } = await supabase
-        .from(type === 'quiz' ? 'quiz_results' : 'mock_test_results')
+        .from('quiz_results')
         .select(`
           user_id,
           score,
-          profiles!${type === 'quiz' ? 'quiz_results_user_id_fkey' : 'mock_test_results_user_id_fkey'} (
+          profiles!quiz_results_user_id_fkey (
             name
+          ),
+          quizzes (
+            subject
           )
-        `);
+        `)
+        .eq('quizzes.subject', selectedTopic); // Ensure selectedTopic is a valid subject
 
       if (error) throw error;
-      if (!data) return;
+
+      console.log('Fetched data:', data);
+
+      // Check if data is valid
+      if (!data || !Array.isArray(data)) {
+        setEntries([]);
+        return;
+      }
 
       // Process data to calculate totals and averages
       const userScores = data.reduce<Record<string, LeaderboardEntry>>((acc, curr) => {
         const userId = curr.user_id;
+        const userName = curr.profiles ? curr.profiles.name : 'Unknown'; // Get user's name from profiles
+
         if (!acc[userId]) {
           acc[userId] = {
             user_id: userId,
-            name: curr.profiles[0]?.name || 'Unknown',
+            name: userName,
             total_score: 0,
             tests_completed: 0,
-            average_score: 0
+            average_score: 0,
           };
         }
         acc[userId].total_score += curr.score;
@@ -61,7 +100,7 @@ export default function Leaderboard() {
       const sortedEntries = Object.values(userScores).sort((a, b) => b.total_score - a.total_score);
       setEntries(sortedEntries);
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error fetching leaderboard:', error);
       setError('Failed to load leaderboard');
     } finally {
       setLoading(false);
@@ -71,7 +110,7 @@ export default function Leaderboard() {
   if (loading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" color="#4CAF50" />
       </View>
     );
   }
@@ -80,30 +119,36 @@ export default function Leaderboard() {
     return (
       <View style={styles.centered}>
         <Text style={styles.error}>{error}</Text>
-        <Button onPress={fetchLeaderboard}>Retry</Button>
+        <Button mode="contained" onPress={fetchLeaderboard} style={styles.retryButton}>
+          Retry
+        </Button>
+      </View>
+    );
+  }
+
+  if (!entries.length) {
+    return (
+      <View style={styles.centered}>
+        <Text>No leaderboard data available.</Text>
       </View>
     );
   }
 
   return (
     <ScrollView style={styles.container}>
-      <Text variant="headlineMedium" style={styles.title}>Leaderboard</Text>
+      <Text variant="headlineMedium" style={styles.title}>Leaderboard for {selectedTopic}</Text>
 
       <View style={styles.filters}>
-        <Chip
-          selected={type === 'quiz'}
-          onPress={() => setType('quiz')}
-          style={styles.chip}
-        >
-          Quizzes
-        </Chip>
-        <Chip
-          selected={type === 'mock'}
-          onPress={() => setType('mock')}
-          style={styles.chip}
-        >
-          Mock Tests
-        </Chip>
+        {topics.map((topic) => (
+          <Chip
+            key={topic}
+            selected={selectedTopic === topic}
+            onPress={() => setSelectedTopic(topic)}
+            style={styles.chip}
+          >
+            {topic}
+          </Chip>
+        ))}
       </View>
 
       <DataTable>
@@ -115,7 +160,7 @@ export default function Leaderboard() {
         </DataTable.Header>
 
         {entries.map((entry, index) => (
-          <DataTable.Row key={entry.user_id}>
+          <DataTable.Row key={entry.user_id} style={styles.row}>
             <DataTable.Cell>{index + 1}</DataTable.Cell>
             <DataTable.Cell>{entry.name}</DataTable.Cell>
             <DataTable.Cell numeric>{entry.total_score}</DataTable.Cell>
@@ -131,6 +176,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#f9f9f9', // Light background color
   },
   centered: {
     flex: 1,
@@ -140,6 +186,9 @@ const styles = StyleSheet.create({
   title: {
     marginBottom: 20,
     textAlign: 'center',
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#4CAF50', // Primary color
   },
   filters: {
     flexDirection: 'row',
@@ -148,9 +197,19 @@ const styles = StyleSheet.create({
   },
   chip: {
     marginHorizontal: 5,
+    backgroundColor: '#4CAF50', // Chip background color
+    color: 'white',
   },
   error: {
     color: 'red',
     marginBottom: 10,
   },
-}); 
+  retryButton: {
+    marginTop: 10,
+  },
+  row: {
+    backgroundColor: '#ffffff', // Row background color
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0', // Row border color
+  },
+});
